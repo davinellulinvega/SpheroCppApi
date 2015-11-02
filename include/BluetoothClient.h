@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <iostream>
 
 
 class BluetoothClient
@@ -51,11 +52,13 @@ class BluetoothClient
        */
       bool openSocket();
    private:
-      inquiry_info *_devices;
       int _socket;
       int _maxRsp;
       int _numRsp;
+      int _devId;
       bdaddr_t _activeAddr;
+      inquiry_info *_devices;
+
 };
 
 #endif // BLUETOOTHCLIENT_H
