@@ -36,7 +36,7 @@ class BluetoothClient
        * @param btAddr: The bluetooth address of the device
        * @return bool
        */
-      bool connect(std::string btAddr);
+      bool connect(std::string btAddr="");
 
       /**
        * @brief disconnect: Close the connection with the bluetooth device.
@@ -50,7 +50,7 @@ class BluetoothClient
        * @brief openSocket: Tries to open a socket on the first available adapter
        * @return bool
        */
-      bool openSocket();
+      bool openHciSocket();
    private:
       int _socket;
       int _maxRsp;
