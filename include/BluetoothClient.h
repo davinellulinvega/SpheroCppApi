@@ -47,9 +47,9 @@ class BluetoothClient
    protected:
       /**
        * @brief openSocket: Tries to open a socket on the first available adapter
-       * @return void
+       * @return bool
        */
-      void openSocket();
+      bool openSocket();
    private:
       inquiry_info *_devices;
       int _socket;
