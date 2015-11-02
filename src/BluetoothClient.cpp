@@ -88,24 +88,33 @@ bool BluetoothClient::openHciSocket() {
 
 bool BluetoothClient::connect(std::string btAddr="") {
    // Define variables
-   bool status = true;
-   btaddr_t addr;
+   bool connected = true;
+   int status = 0;
+   struct sockaddr_rc addr = {0};
+
+   // Allocate a socket
+   _socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM); // We use RFCOMM in this case a we will be streaming data from sensors
 
    // Test the value of the provided address
    if(btAddr == "") {
       // Let you choose the device you want to connect to
-      addr = BluetoothClient::chooseDevice();
+      addr.rc_bdaddr = BluetoothClient::chooseDevice();
    }
    else {
       // Simply translate the provided address
-      str2ba(btAddr, addr);
+      str2ba(btAddr, &addr.rc_baddr);
    }
 
-   // Try to open to the socket
-   if() {
+   // Set the remaining parameters for the connection
+   addr.rc_family = AF_BLUETOOTH;
+   addr.rc_channel = (uint8_t)0; // Under linux this means that it will bind to the first available channel
 
+   // Try to connect
+   if(status = connect(_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+      perror("Connection has failed ...");
+      connected = false;
    }
 
    // Return the status of the connection
-   return status;
+   return connected;
 }
