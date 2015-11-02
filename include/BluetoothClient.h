@@ -25,6 +25,12 @@ class BluetoothClient
       void getAvailableDevices(int timeout);
 
       /**
+       * @brief chooseDevice();
+       *
+       */
+      bdaddr_t chooseDevice();
+
+      /**
        * @brief connect: Connect to a bluetooth device
        * @param btAddr: The bluetooth address of the device
        * @return bool
@@ -42,6 +48,7 @@ class BluetoothClient
    private:
       inquiry_info *_devices;
       int _socket;
+      int _maxRsp;
 };
 
 #endif // BLUETOOTHCLIENT_H
