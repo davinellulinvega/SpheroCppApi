@@ -1,6 +1,6 @@
 #include "BluetoothClient.h"
 
-BluetoothClient::BluetoothClient():_socket=0,_maxRsp=255,_numRsp=0,_activeAddr=NULL
+BluetoothClient::BluetoothClient():_socket(0),_maxRsp(255),_numRsp(0),_activeAddr()
 {
    // Reserve some space for the list of available devices
    _devices = (inquiry_info*)malloc(_maxRsp * sizeof(inquiry_info));
@@ -12,14 +12,14 @@ BluetoothClient::~BluetoothClient() {
 }
 
 
-BluetoothClient::getAvailableDevices(int timeout) {
+void BluetoothClient::getAvailableDevices(int timeout) {
    // Define the temporary parameters
-   int i, numRsp, devId, flags = IREQ_CACHE_FLUSH; // IREQ_CACHE_FLUSH, flushes the previous list of discovered devices before finding any new one
+   int flags = IREQ_CACHE_FLUSH; // IREQ_CACHE_FLUSH, flushes the previous list of discovered devices before finding any new one
 
    // Open a socket on an available adapter
    if(BluetoothClient::openSocket()) {
       // Look for devices in the surrounding
-      _numRsp = hci_inquiry(devId, timeout, maxRsp, NULL, &_devices, flags);
+      _numRsp = hci_inquiry(_devId, timeout, _maxRsp, NULL, &_devices, flags);
       if(_numRsp < 0) {
          perror("An error happened while querying for bluetooth devices.");
       }
@@ -29,7 +29,7 @@ BluetoothClient::getAvailableDevices(int timeout) {
    }
 }
 
-BluetoothClient::chooseDevice(){
+bdaddr_t BluetoothClient::chooseDevice(){
    // Variables
    int i;
    int choice = -1;
@@ -61,7 +61,7 @@ BluetoothClient::chooseDevice(){
 
    // If the user was able to perform a choice
    if(choice != -1 && choice < _numRsp) {
-      _activeAddr = &(_devices+choice);
+      _activeAddr = (_devices+choice)->bdaddr;
    }
 
    // Return the address of the choosen device
@@ -69,15 +69,14 @@ BluetoothClient::chooseDevice(){
 }
 
 
-BluetoothClient::openSocket() {
+bool BluetoothClient::openSocket() {
    // Define variables
-   int devId;
    bool status = true;
 
    // Try to open the socket
-   devId = hci_get_route(NULL); // This way the first adapter will be chosen
-   _socket = hci_open_dev(devId);
-   if(devId < 0 || _socket < 0) {
+   _devId = hci_get_route(NULL); // This way the first adapter will be chosen
+   _socket = hci_open_dev(_devId);
+   if(_devId < 0 || _socket < 0) {
       // On error display a message
       perror("Unable to open a socket on the bluetooth adapter.");
       status = false;
