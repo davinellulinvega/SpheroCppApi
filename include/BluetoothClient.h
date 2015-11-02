@@ -19,9 +19,10 @@ class BluetoothClient
       virtual ~BluetoothClient();
       /**
        * @brief getAvailableDevices: Query the surrounding for available bluetooth devices.
+       * @param int timeout: The function will be looking for devices for a duration of timeout * 1.28s
        * @return void
        */
-      void getAvailableDevices();
+      void getAvailableDevices(int timeout);
 
       /**
        * @brief connect: Connect to a bluetooth device
