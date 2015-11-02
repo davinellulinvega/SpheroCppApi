@@ -17,7 +17,7 @@ void BluetoothClient::getAvailableDevices(int timeout) {
    int flags = IREQ_CACHE_FLUSH; // IREQ_CACHE_FLUSH, flushes the previous list of discovered devices before finding any new one
 
    // Open a socket on an available adapter
-   if(BluetoothClient::openSocket()) {
+   if(BluetoothClient::openHciSocket()) {
       // Look for devices in the surrounding
       _numRsp = hci_inquiry(_devId, timeout, _maxRsp, NULL, &_devices, flags);
       if(_numRsp < 0) {
@@ -37,7 +37,7 @@ bdaddr_t BluetoothClient::chooseDevice(){
    char name[248] = {0}; // Will temporarily store the name of a device
 
    // Open a socket
-   if(BluetoothClient::openSocket()) {
+   if(BluetoothClient::openHciSocket()) {
       for(i=0; i < _numRsp; i++) {
          // Ask the device for its friendly name
          if(hci_read_remote_name(_socket, &(_devices+i)->bdaddr, sizeof(name), name, 0) < 0) {
@@ -69,7 +69,7 @@ bdaddr_t BluetoothClient::chooseDevice(){
 }
 
 
-bool BluetoothClient::openSocket() {
+bool BluetoothClient::openHciSocket() {
    // Define variables
    bool status = true;
 
@@ -83,5 +83,29 @@ bool BluetoothClient::openSocket() {
    }
 
    // Return true on opened socket, false otherwise
+   return status;
+}
+
+bool BluetoothClient::connect(std::string btAddr="") {
+   // Define variables
+   bool status = true;
+   btaddr_t addr;
+
+   // Test the value of the provided address
+   if(btAddr == "") {
+      // Let you choose the device you want to connect to
+      addr = BluetoothClient::chooseDevice();
+   }
+   else {
+      // Simply translate the provided address
+      str2ba(btAddr, addr);
+   }
+
+   // Try to open to the socket
+   if() {
+
+   }
+
+   // Return the status of the connection
    return status;
 }
