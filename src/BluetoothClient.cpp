@@ -109,12 +109,26 @@ bool BluetoothClient::connect(std::string btAddr="") {
    addr.rc_family = AF_BLUETOOTH;
    addr.rc_channel = (uint8_t)0; // Under linux this means that it will bind to the first available channel
 
+   std::cout << "Trying to open a connection ..." << std::endl;
+
    // Try to connect
    if(status = connect(_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-      perror("Connection has failed ...");
+      perror(">>> Connection has failed");
       connected = false;
+   }
+   else {
+      std::cout << ">>> Connection established" << std::endl;
    }
 
    // Return the status of the connection
    return connected;
+}
+
+void BluetoothClient::disconnect() {
+   std::cout << "Closing the socket ..." << std::endl;
+   // Unceremoniously close the socket
+   close(_socket);
+   // Assign 0 to the socket
+   _socket = 0;
+   std::cout << ">>> Disconnected from the device" << std::endl;
 }
