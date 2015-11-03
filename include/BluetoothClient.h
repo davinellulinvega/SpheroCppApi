@@ -1,14 +1,15 @@
 #ifndef BLUETOOTHCLIENT_H
 #define BLUETOOTHCLIENT_H
 
-#include <bluetooth/bluetooth.h>
-#include <bluetooth/hci.h>
-#include <bluetooth/hci_lib.h>
-#include <sys/socket.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <iostream>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/hci.h>
+#include <bluetooth/hci_lib.h>
+#include <bluetooth/rfcomm.h>
+#include <sys/socket.h>
 
 
 class BluetoothClient
@@ -36,7 +37,7 @@ class BluetoothClient
        * @param btAddr: The bluetooth address of the device
        * @return bool
        */
-      bool connect(std::string btAddr="");
+      bool connectToDevice(char* btAddr);
 
       /**
        * @brief disconnect: Close the connection with the bluetooth device.

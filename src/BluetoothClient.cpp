@@ -36,6 +36,9 @@ bdaddr_t BluetoothClient::chooseDevice(){
    char addr[19] = {0}; // Will temporarily store the address of device
    char name[248] = {0}; // Will temporarily store the name of a device
 
+   // Get the list of available devices
+   BluetoothClient::getAvailableDevices(8);
+
    // Open a socket
    if(BluetoothClient::openHciSocket()) {
       for(i=0; i < _numRsp; i++) {
@@ -53,10 +56,14 @@ bdaddr_t BluetoothClient::chooseDevice(){
 
       // Close the socket
       close(_socket);
-
-      // Ask the user to choose a device
-      std::cout << "\nChoose the device you wish to connect to: \n" << std::endl;
-      std::cin >> choice;
+      if(_numRsp > 0) {
+         // Ask the user to choose a device
+         std::cout << "\nChoose the device you wish to connect to:" << std::endl;
+         std::cin >> choice;
+      }
+      else {
+         exit(1);
+      }
    }
 
    // If the user was able to perform a choice
@@ -86,38 +93,48 @@ bool BluetoothClient::openHciSocket() {
    return status;
 }
 
-bool BluetoothClient::connect(std::string btAddr="") {
+bool BluetoothClient::connectToDevice(char* btAddr) {
    // Define variables
    bool connected = true;
    int status = 0;
-   struct sockaddr_rc addr = {0};
+   sockaddr_rc addr = { 0 };
 
-   // Allocate a socket
-   _socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM); // We use RFCOMM in this case a we will be streaming data from sensors
 
    // Test the value of the provided address
-   if(btAddr == "") {
+   if(btAddr == NULL) {
       // Let you choose the device you want to connect to
       addr.rc_bdaddr = BluetoothClient::chooseDevice();
    }
    else {
       // Simply translate the provided address
-      str2ba(btAddr, &addr.rc_baddr);
+      str2ba(btAddr, &addr.rc_bdaddr);
    }
 
    // Set the remaining parameters for the connection
    addr.rc_family = AF_BLUETOOTH;
-   addr.rc_channel = (uint8_t)0; // Under linux this means that it will bind to the first available channel
+   addr.rc_channel = (uint8_t)1; // Under linux this means that it will bind to the first available channel
 
    std::cout << "Trying to open a connection ..." << std::endl;
 
-   // Try to connect
-   if(status = connect(_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-      perror(">>> Connection has failed");
+   // Allocate a socket
+   if((_socket = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM)) < 0) { // We use RFCOMM in this case a we will be streaming data from sensors
+      // Display an error message
+      perror(">>> An error happened while creating the socket");
       connected = false;
+      close(_socket);
    }
    else {
-      std::cout << ">>> Connection established" << std::endl;
+      // Try to connect
+      if((status = connect(_socket, (struct sockaddr *)&addr, sizeof(addr))) < 0) {
+         // Display an error message to the user
+         perror(">>> Connection has failed");
+         connected = false;
+         // Close the allocated socket
+         close(_socket);
+      }
+      else {
+         std::cout << ">>> Connection established" << std::endl;
+      }
    }
 
    // Return the status of the connection
@@ -128,7 +145,5 @@ void BluetoothClient::disconnect() {
    std::cout << "Closing the socket ..." << std::endl;
    // Unceremoniously close the socket
    close(_socket);
-   // Assign 0 to the socket
-   _socket = 0;
    std::cout << ">>> Disconnected from the device" << std::endl;
 }
