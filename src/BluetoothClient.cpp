@@ -1,6 +1,6 @@
 #include "BluetoothClient.h"
 
-BluetoothClient::BluetoothClient():_socket(0),_maxRsp(255),_numRsp(0),_activeAddr()
+BluetoothClient::BluetoothClient():_socket(0),_maxRsp(255),_numRsp(0)
 {
    // Reserve some space for the list of available devices
    _devices = (inquiry_info*)malloc(_maxRsp * sizeof(inquiry_info));
@@ -35,6 +35,7 @@ bdaddr_t BluetoothClient::chooseDevice(){
    int choice = -1;
    char addr[19] = {0}; // Will temporarily store the address of device
    char name[248] = {0}; // Will temporarily store the name of a device
+   bdaddr_t chosenAddr = NULL;
 
    // Get the list of available devices
    BluetoothClient::getAvailableDevices(8);
@@ -68,11 +69,11 @@ bdaddr_t BluetoothClient::chooseDevice(){
 
    // If the user was able to perform a choice
    if(choice != -1 && choice < _numRsp) {
-      _activeAddr = (_devices+choice)->bdaddr;
+      chosenAddr = (_devices+choice)->bdaddr;
    }
 
    // Return the address of the choosen device
-   return _activeAddr;
+   return chosenAddr;
 }
 
 

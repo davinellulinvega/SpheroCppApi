@@ -57,7 +57,6 @@ class BluetoothClient
       int _maxRsp;
       int _numRsp;
       int _devId;
-      bdaddr_t _activeAddr;
       inquiry_info *_devices;
 
 };
