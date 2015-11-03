@@ -51,11 +51,10 @@ class BluetoothClient
        * @brief openSocket: Tries to open a socket on the first available adapter
        * @return bool
        */
-      bool openHciSocket();
+      bool openHciSocket(int &devId);
    private:
       int _socket;
       int _numRsp;
-      int _devId;
       inquiry_info *_devices;
 
       const int MAX_RESPONSE = 255;
