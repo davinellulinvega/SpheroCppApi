@@ -37,16 +37,18 @@ class BluetoothClient
    protected:
       /**
        * @brief openSocket: Tries to open a socket on the first available adapter
+       * @param devId: if of the bluetooth adapter to use
        * @return bool
        */
       bool openHciSocket(int &devId);
-      
+
       /**
        * @brief getAvailableDevices: Query the surrounding for available bluetooth devices.
-       * @param int timeout: The function will be looking for devices for a duration of timeout * 1.28s
+       * @param devices: the list of available devices
+       * @param numRsp: The number of available devices
        * @return void
        */
-      void getAvailableDevices();
+      void getAvailableDevices(inquiry_info* devices, int &numRsp);
 
       /**
        * @brief chooseDevice();
@@ -57,8 +59,6 @@ class BluetoothClient
 
    private:
       int _socket;
-      int _numRsp;
-      inquiry_info *_devices;
 
       const int MAX_RESPONSE = 255;
       const int DISCOVERY_TIMEOUT = 8;

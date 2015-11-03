@@ -1,18 +1,14 @@
 #include "BluetoothClient.h"
 
-BluetoothClient::BluetoothClient():_socket(0),_numRsp(0)
+BluetoothClient::BluetoothClient():_socket(0)
 {
-   // Reserve some space for the list of available devices
-   _devices = (inquiry_info*)malloc(BluetoothClient::MAX_RESPONSE * sizeof(inquiry_info));
 }
 
 BluetoothClient::~BluetoothClient() {
-   // Free the memory allocated for the devices
-   free(_devices);
 }
 
 
-void BluetoothClient::getAvailableDevices() {
+void BluetoothClient::getAvailableDevices(inquiry_info* devices, int &numRsp) {
    // Define the temporary parameters
    int flags = IREQ_CACHE_FLUSH; // IREQ_CACHE_FLUSH, flushes the previous list of discovered devices before finding any new one
    int devId = -1;
@@ -20,8 +16,8 @@ void BluetoothClient::getAvailableDevices() {
    // Open a socket on an available adapter
    if(BluetoothClient::openHciSocket(devId)) {
       // Look for devices in the surrounding
-      _numRsp = hci_inquiry(devId, BluetoothClient::DISCOVERY_TIMEOUT, BluetoothClient::MAX_RESPONSE, NULL, &_devices, flags);
-      if(_numRsp < 0) {
+      numRsp = hci_inquiry(devId, BluetoothClient::DISCOVERY_TIMEOUT, BluetoothClient::MAX_RESPONSE, NULL, &devices, flags);
+      if(numRsp < 0) {
          perror("An error happened while querying for bluetooth devices.");
       }
 
@@ -35,23 +31,25 @@ bdaddr_t BluetoothClient::chooseDevice(){
    int devId = -1;
    int i;
    int choice = -1;
+   int numRsp = 0;
    char addr[19] = {0}; // Will temporarily store the address of device
    char name[248] = {0}; // Will temporarily store the name of a device
    bdaddr_t chosenAddr = { 0 };
+   inquiry_info* devices = (inquiry_info*)malloc(BluetoothClient::MAX_RESPONSE * sizeof(inquiry_info));
 
    // Get the list of available devices
-   BluetoothClient::getAvailableDevices();
+   BluetoothClient::getAvailableDevices(devices, numRsp);
 
    // Open a socket
    if(BluetoothClient::openHciSocket(devId)) {
-      for(i=0; i < _numRsp; i++) {
+      for(i=0; i < numRsp; i++) {
          // Ask the device for its friendly name
-         if(hci_read_remote_name(_socket, &(_devices+i)->bdaddr, sizeof(name), name, 0) < 0) {
+         if(hci_read_remote_name(_socket, &(devices+i)->bdaddr, sizeof(name), name, 0) < 0) {
             // If no name is returned
             strcpy(name, "Unknown");
          }
          // Translate the address from bdaddr format to string
-         ba2str(&(_devices+i)->bdaddr, addr);
+         ba2str(&(devices+i)->bdaddr, addr);
 
          // Display the address followed by the name as a menu item
          printf("%d > %s %s\n", i, addr, name);
@@ -59,7 +57,8 @@ bdaddr_t BluetoothClient::chooseDevice(){
 
       // Close the socket
       close(_socket);
-      if(_numRsp > 0) {
+
+      if(numRsp > 0) {
          // Ask the user to choose a device
          std::cout << "\nChoose the device you wish to connect to:" << std::endl;
          std::cin >> choice;
@@ -70,9 +69,12 @@ bdaddr_t BluetoothClient::chooseDevice(){
    }
 
    // If the user was able to perform a choice
-   if(choice != -1 && choice < _numRsp) {
-      chosenAddr = (_devices+choice)->bdaddr;
+   if(choice != -1 && choice < numRsp) {
+      chosenAddr = (devices+choice)->bdaddr;
    }
+
+   // Destroy the list of bluetooth devices
+   free(devices);
 
    // Return the address of the choosen device
    return chosenAddr;
