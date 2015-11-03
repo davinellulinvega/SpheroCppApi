@@ -54,10 +54,12 @@ class BluetoothClient
       bool openHciSocket();
    private:
       int _socket;
-      int _maxRsp;
       int _numRsp;
       int _devId;
       inquiry_info *_devices;
+
+      const int MAX_RESPONSE = 255;
+      const int DISCOVERY_TIMEOUT = 8;
 
 };
 

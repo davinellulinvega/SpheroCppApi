@@ -1,6 +1,6 @@
 #include "BluetoothClient.h"
 
-BluetoothClient::BluetoothClient():_socket(0),_maxRsp(255),_numRsp(0)
+BluetoothClient::BluetoothClient():_socket(0),_numRsp(0)
 {
    // Reserve some space for the list of available devices
    _devices = (inquiry_info*)malloc(_maxRsp * sizeof(inquiry_info));
@@ -12,14 +12,14 @@ BluetoothClient::~BluetoothClient() {
 }
 
 
-void BluetoothClient::getAvailableDevices(int timeout) {
+void BluetoothClient::getAvailableDevices() {
    // Define the temporary parameters
    int flags = IREQ_CACHE_FLUSH; // IREQ_CACHE_FLUSH, flushes the previous list of discovered devices before finding any new one
 
    // Open a socket on an available adapter
    if(BluetoothClient::openHciSocket()) {
       // Look for devices in the surrounding
-      _numRsp = hci_inquiry(_devId, timeout, _maxRsp, NULL, &_devices, flags);
+      _numRsp = hci_inquiry(_devId, BluetoothClient::DISCOVERY_TIMEOUT, BluetoothClient::MAX_RESPONSE, NULL, &_devices, flags);
       if(_numRsp < 0) {
          perror("An error happened while querying for bluetooth devices.");
       }
@@ -38,7 +38,7 @@ bdaddr_t BluetoothClient::chooseDevice(){
    bdaddr_t chosenAddr = NULL;
 
    // Get the list of available devices
-   BluetoothClient::getAvailableDevices(8);
+   BluetoothClient::getAvailableDevices();
 
    // Open a socket
    if(BluetoothClient::openHciSocket()) {
