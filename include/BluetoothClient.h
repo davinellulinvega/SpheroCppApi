@@ -19,18 +19,6 @@ class BluetoothClient
       BluetoothClient();
       /** Default destructor */
       virtual ~BluetoothClient();
-      /**
-       * @brief getAvailableDevices: Query the surrounding for available bluetooth devices.
-       * @param int timeout: The function will be looking for devices for a duration of timeout * 1.28s
-       * @return void
-       */
-      void getAvailableDevices();
-
-      /**
-       * @brief chooseDevice();
-       *
-       */
-      bdaddr_t chooseDevice();
 
       /**
        * @brief connect: Connect to a bluetooth device
@@ -52,6 +40,21 @@ class BluetoothClient
        * @return bool
        */
       bool openHciSocket(int &devId);
+      
+      /**
+       * @brief getAvailableDevices: Query the surrounding for available bluetooth devices.
+       * @param int timeout: The function will be looking for devices for a duration of timeout * 1.28s
+       * @return void
+       */
+      void getAvailableDevices();
+
+      /**
+       * @brief chooseDevice();
+       *
+       */
+      bdaddr_t chooseDevice();
+
+
    private:
       int _socket;
       int _numRsp;
