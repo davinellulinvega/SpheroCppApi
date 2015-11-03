@@ -24,7 +24,7 @@ class BluetoothClient
        * @param int timeout: The function will be looking for devices for a duration of timeout * 1.28s
        * @return void
        */
-      void getAvailableDevices(int timeout);
+      void getAvailableDevices();
 
       /**
        * @brief chooseDevice();
