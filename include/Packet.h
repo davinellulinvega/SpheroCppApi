@@ -1,8 +1,6 @@
 #ifndef PACKET_H
 #define PACKET_H
 
-#include <stdlib.h>
-#include <unistd.h>
 #include <stdint.h>
 
 class Packet
@@ -13,6 +11,18 @@ class Packet
 
       /** Default destructor */
       virtual ~Packet();
+
+      /**
+       * @brief format: format the packet object into an array of byte ready to be sent
+       * @return uint8_t*
+       */
+      uint8_t* format();
+
+      /**
+       * @brief getSize: Compute the total length of the packet
+       * @return size_t
+       */
+      size_t getSize();
 
    protected:
    private:
