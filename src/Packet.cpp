@@ -14,7 +14,7 @@ Packet::Packet(uint8_t devId, uint8_t cmdId, uint8_t* data, uint8_t dataLen, boo
       _sop2 = Packet::SYNC_PACKET;
 
       // Define a sequence number for the packet
-      _seqNbr = _seq++;
+      _seqNbr = Packet::_seq++;
    }
 
    // Compute the length
