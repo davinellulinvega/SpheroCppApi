@@ -1,13 +1,20 @@
 #include "BluetoothClient.h"
 
+/** Default constructor */
 BluetoothClient::BluetoothClient():_socket(0)
 {
 }
 
+/** Default destructor */
 BluetoothClient::~BluetoothClient() {
 }
 
-
+/**
+ * @brief getAvailableDevices: Query the surrounding for available bluetooth devices.
+ * @param devices: the list of available devices
+ * @param numRsp: The number of available devices
+ * @return void
+ */
 void BluetoothClient::getAvailableDevices(inquiry_info* devices, int &numRsp) {
    // Define the temporary parameters
    int flags = IREQ_CACHE_FLUSH; // IREQ_CACHE_FLUSH, flushes the previous list of discovered devices before finding any new one
@@ -26,6 +33,10 @@ void BluetoothClient::getAvailableDevices(inquiry_info* devices, int &numRsp) {
    }
 }
 
+/**
+ * @brief chooseDevice: Allow you to choose which bluetooth device you want to connect to.
+ * @return bdaddr_t
+ */
 bdaddr_t BluetoothClient::chooseDevice(){
    // Variables
    int devId = -1;
@@ -80,7 +91,11 @@ bdaddr_t BluetoothClient::chooseDevice(){
    return chosenAddr;
 }
 
-
+/**
+ * @brief openSocket: Tries to open an HCI socket on the first available adapter.
+ * @param devId: id of the bluetooth adapter to use.
+ * @return bool
+ */
 bool BluetoothClient::openHciSocket(int &devId) {
    // Define variables
    bool status = true;
@@ -98,6 +113,11 @@ bool BluetoothClient::openHciSocket(int &devId) {
    return status;
 }
 
+/**
+ * @brief connect: Connect to a bluetooth device
+ * @param btAddr: The bluetooth address of the device
+ * @return bool
+ */
 bool BluetoothClient::connectToDevice(char* btAddr) {
    // Define variables
    bool connected = true;
@@ -146,6 +166,10 @@ bool BluetoothClient::connectToDevice(char* btAddr) {
    return connected;
 }
 
+/**
+ * @brief disconnect: Close the connection with the bluetooth device.
+ * @return void
+ */
 void BluetoothClient::disconnect() {
    std::cout << "Closing the socket ..." << std::endl;
    // Unceremoniously close the socket

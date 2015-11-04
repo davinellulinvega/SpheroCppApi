@@ -36,8 +36,8 @@ class BluetoothClient
 
    protected:
       /**
-       * @brief openSocket: Tries to open a socket on the first available adapter
-       * @param devId: if of the bluetooth adapter to use
+       * @brief openSocket: Tries to open an HCI socket on the first available adapter.
+       * @param devId: id of the bluetooth adapter to use.
        * @return bool
        */
       bool openHciSocket(int &devId);
@@ -51,8 +51,8 @@ class BluetoothClient
       void getAvailableDevices(inquiry_info* devices, int &numRsp);
 
       /**
-       * @brief chooseDevice();
-       *
+       * @brief chooseDevice: Allow you to choose which bluetooth device you want to connect to.
+       * @return bdaddr_t
        */
       bdaddr_t chooseDevice();
 
