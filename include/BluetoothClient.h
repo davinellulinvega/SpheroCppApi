@@ -10,6 +10,7 @@
 #include <bluetooth/hci_lib.h>
 #include <bluetooth/rfcomm.h>
 #include <sys/socket.h>
+#include "Packet.h"
 
 
 class BluetoothClient
