@@ -1,5 +1,8 @@
 #include "Packet.h"
 
+// Initialize the sequence
+uint8_t Packet::_seq = 0;
+
 /** Default constructor */
 Packet::Packet(uint8_t devId, uint8_t cmdId, uint8_t* data, uint8_t dataLen, bool isAsync):_sop1(0xFF), _devId(devId), _cmdId(cmdId), _data(data)
 {

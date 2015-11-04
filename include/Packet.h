@@ -1,14 +1,19 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdint.h>
 
 class Packet
 {
    public:
       /** Default constructor */
       Packet(uint8_t devId, uint8_t cmdId, uint8_t* data, uint8_t dataLen, bool isAsync);
+
       /** Default destructor */
       virtual ~Packet();
+
    protected:
    private:
       uint8_t _sop1; // Start of packet 1, always 0xFF
@@ -23,7 +28,7 @@ class Packet
       const uint8_t ASYNC_PACKET = 0xfe;
       const uint8_t SYNC_PACKET = 0xff;
 
-      static uint8_t _seq = 0;
+      static uint8_t _seq;
 };
 
 #endif // PACKET_H
