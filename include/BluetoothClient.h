@@ -41,10 +41,10 @@ class BluetoothClient
 
       /**
        * @brief send: Send a packet to the bluetooth device
-       * @param packet: The packet to send
+       * @param packet: A pointer to the packet to send
        * @return size_t
        */
-      size_t sendPacket(Packet &packet);
+      size_t sendPacket(Packet *packet);
 
 
    protected:
