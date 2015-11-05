@@ -70,3 +70,27 @@ uint8_t* Packet::format() {
    // And return the array
    return fmtPckt;
 }
+
+/**
+ * @brief getSeqNbr : Getter for the member _seqNbr
+ * @return uint8_t
+ */
+uint8_t Packet::getSeqNbr() {
+   return _seqNbr;
+}
+
+/**
+ * @brief getDevId : Getter for the member _devId
+ * @return uint8_t
+ */
+uint8_t Packet::getDevId() {
+   return _devId;
+}
+
+/**
+ * @brief getCmdId : Getter for the member _cmdId
+ * @return uint8_t
+ */
+uint8_t Packet::getCmdId() {
+   return _cmdId;
+}
