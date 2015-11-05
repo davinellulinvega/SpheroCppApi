@@ -2,6 +2,7 @@
 #define PACKET_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 class Packet
 {
@@ -14,9 +15,10 @@ class Packet
 
       /**
        * @brief format: format the packet object into an array of byte ready to be sent
+       * @param dataLen: Length of the data payload
        * @return uint8_t*
        */
-      uint8_t* format();
+      uint8_t* format(size_t dataLen);
 
       /**
        * @brief getSize: Compute the total length of the packet
