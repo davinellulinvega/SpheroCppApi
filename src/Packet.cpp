@@ -65,7 +65,7 @@ uint8_t* Packet::format() {
    }
 
    // Finally the checksum goes in the last cell
-   fmtPckt[6 + _len] = _chkSum;
+   fmtPckt[getSize() - 1] = _chkSum;
 
    // And return the array
    return fmtPckt;
