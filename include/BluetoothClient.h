@@ -12,6 +12,11 @@
 #include <sys/socket.h>
 #include "Packet.h"
 
+struct Command {
+   uint8_t devId;
+   uint8_t cmdId;
+}
+
 
 class BluetoothClient
 {
@@ -33,6 +38,13 @@ class BluetoothClient
        * @return void
        */
       void disconnect();
+
+      /**
+       * @brief send: Send a packet to the bluetooth device
+       * @param packet: The packet to send
+       * @return size_t
+       */
+      size_t send(Packet &packet);
 
 
    protected:
@@ -60,6 +72,7 @@ class BluetoothClient
 
    private:
       int _socket;
+      Command _lookup[256];
 
       const int MAX_RESPONSE = 255;
       const int DISCOVERY_TIMEOUT = 8;
