@@ -158,6 +158,7 @@ bool BluetoothClient::connectToDevice(char* btAddr) {
          close(_socket);
       }
       else {
+         connected = true;
          std::cout << ">>> Connection established" << std::endl;
       }
    }
