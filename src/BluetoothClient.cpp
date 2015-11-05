@@ -3,7 +3,6 @@
 /** Default constructor */
 BluetoothClient::BluetoothClient():_socket(0)
 {
-   _lookup = {};
 }
 
 /** Default destructor */
@@ -190,15 +189,15 @@ size_t BluetoothClient::sendPacket(Packet &packet) {
    size_t status = 0;
 
    // Format the packet
-   fmtPckt = packet->format();
+   fmtPckt = packet.format();
 
    // Fill in the look up table
-   cmdStruct->devId = packet->getDevId();
-   cmdStruct->cmdId = packet->getCmdId();
-   _lookup[packet->getSeqNbr] = cmdStruct;
+   cmdStruct.devId = packet.getDevId();
+   cmdStruct.cmdId = packet.getCmdId();
+   _lookup[packet.getSeqNbr()] = cmdStruct;
 
    // Send the package
-   status = send(_socket, fmtPckt, packet->getSize(), NULL);
+   status = send(_socket, fmtPckt, packet.getSize(), NULL);
 
    // Return the status
    return status;

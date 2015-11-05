@@ -15,7 +15,7 @@
 struct Command {
    uint8_t devId;
    uint8_t cmdId;
-}
+};
 
 
 class BluetoothClient
