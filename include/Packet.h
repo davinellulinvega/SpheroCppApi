@@ -18,7 +18,7 @@ class Packet
        * @param dataLen: Length of the data payload
        * @return uint8_t*
        */
-      uint8_t* format(size_t dataLen);
+      uint8_t* format();
 
       /**
        * @brief getSize: Compute the total length of the packet
