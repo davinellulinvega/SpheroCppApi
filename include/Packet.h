@@ -26,6 +26,24 @@ class Packet
        */
       size_t getSize();
 
+      /**
+       * @brief getSeqNbr : Getter for the member _seqNbr
+       * @return uint8_t
+       */
+      uint8_t getSeqNbr();
+
+      /**
+       * @brief getDevId : Getter for the member _devId
+       * @return uint8_t
+       */
+      uint8_t getDevId();
+
+      /**
+       * @brief getCmdId : Getter for the member _cmdId
+       * @return uint8_t
+       */
+      uint8_t getCmdId();
+
    protected:
    private:
       uint8_t _sop1; // Start of packet 1, always 0xFF
