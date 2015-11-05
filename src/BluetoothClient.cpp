@@ -203,3 +203,25 @@ size_t BluetoothClient::sendPacket(Packet *packet) {
    // Return the status
    return status;
 }
+
+/**
+ * @brief receivePacket: Retrieve a packet sent by the bluetooth device
+ * @return SimpleResponse*
+ */
+SimpleResponse* BluetoothClient::receivePacket() {
+   // Variables
+   uint8_t *buf;
+   SimpleResponse *answer = NULL;
+
+   // Try to receive the packet sent by the bluetooth device
+   if((recv(_socket, buf, (SimpleResponse::PACKET_SIZE * sizeof(uint8_t)), NULL)) == -1) {
+      perror("An error happened while receiving your packet");
+   }
+   else {
+      // Create a new answer
+      answer = new SimpleResponse(buf);
+   }
+
+   // Return the answer
+   return answer;
+}

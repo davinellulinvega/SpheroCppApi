@@ -42,11 +42,17 @@ class BluetoothClient
       void disconnect();
 
       /**
-       * @brief send: Send a packet to the bluetooth device
+       * @brief sendPacket: Send a packet to the bluetooth device
        * @param packet: A pointer to the packet to send
        * @return size_t
        */
       size_t sendPacket(Packet *packet);
+
+      /**
+       * @brief receivePacket: Retrieve a packet sent by the bluetooth device
+       * @return SimpleResponse*
+       */
+      SimpleResponse* receivePacket();
 
 
    protected:

@@ -21,6 +21,8 @@ class SimpleResponse
        */
       uint8_t getMrsp();
 
+      static const int PACKET_SIZE = 6;
+
    protected:
    private:
       uint8_t _spo1;
