@@ -198,7 +198,12 @@ size_t BluetoothClient::sendPacket(Packet *packet) {
    _lookup[packet->getSeqNbr()] = cmdStruct;
 
    // Send the package
-   status = send(_socket, fmtPckt, packet->getSize(), NULL);
+   status = send(_socket, fmtPckt, packet->getSize(), 0);
+
+   // Synchronize the socket's state
+   if(fsync(_socket) == -1) {
+      perror("An error happened while synchronizing the socket's state");
+   }
 
    // Return the status
    return status;
