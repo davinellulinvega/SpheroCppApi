@@ -32,3 +32,12 @@ Packet::~Packet()
 {
    // This is not the function you are looking for
 }
+
+/**
+ * @brief getSize: Compute the total length of the packet
+ * @return size_t
+ */
+size_t Packet::getSize() {
+   // Simply returns the size of the packet which is 6bytes + the data payload and checksum already contained in _len
+   return (size_t)(6 + _len);
+}
