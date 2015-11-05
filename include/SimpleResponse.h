@@ -24,7 +24,7 @@ class SimpleResponse
    protected:
    private:
       uint8_t _spo1;
-      uint8_t _spo1;
+      uint8_t _spo2;
       uint8_t _mrsp;
       uint8_t _seqNbr;
       uint8_t _len;
