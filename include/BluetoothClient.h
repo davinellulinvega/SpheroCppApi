@@ -10,7 +10,9 @@
 #include <bluetooth/hci_lib.h>
 #include <bluetooth/rfcomm.h>
 #include <sys/socket.h>
+
 #include "Packet.h"
+#include "SimpleResponse.h"
 
 struct Command {
    uint8_t devId;
