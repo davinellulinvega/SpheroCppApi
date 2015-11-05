@@ -3,6 +3,7 @@
 /** Default constructor */
 BluetoothClient::BluetoothClient():_socket(0)
 {
+   _lookup = {};
 }
 
 /** Default destructor */
@@ -175,4 +176,30 @@ void BluetoothClient::disconnect() {
    // Unceremoniously close the socket
    close(_socket);
    std::cout << ">>> Disconnected from the device" << std::endl;
+}
+
+/**
+ * @brief send: Send a packet to the bluetooth device
+ * @param packet: The packet to send
+ * @return size_t
+ */
+size_t BluetoothClient::sendPacket(Packet &packet) {
+   // Variables
+   uint8_t* fmtPckt;
+   Command cmdStruct;
+   size_t status = 0;
+
+   // Format the packet
+   fmtPckt = packet->format();
+
+   // Fill in the look up table
+   cmdStruct->devId = packet->getDevId();
+   cmdStruct->cmdId = packet->getCmdId();
+   _lookup[packet->getSeqNbr] = cmdStruct;
+
+   // Send the package
+   status = send(_socket, fmtPckt, packet->getSize(), NULL);
+
+   // Return the status
+   return status;
 }
