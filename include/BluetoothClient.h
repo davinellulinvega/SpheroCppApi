@@ -44,7 +44,7 @@ class BluetoothClient
        * @param packet: The packet to send
        * @return size_t
        */
-      size_t send(Packet &packet);
+      size_t sendPacket(Packet &packet);
 
 
    protected:
