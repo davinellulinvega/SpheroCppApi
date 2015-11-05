@@ -31,6 +31,8 @@ class SimpleResponse
       uint8_t _seqNbr;
       uint8_t _len;
       uint8_t _chkSum;
+      uint8_t _devId;
+      uint8_t _cmdId;
 };
 
 #endif // SIMPLERESPONSE_H
